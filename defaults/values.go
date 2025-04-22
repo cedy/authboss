@@ -2,13 +2,13 @@ package defaults
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 
-	"github.com/friendsofgo/errors"
-	"github.com/volatiletech/authboss/v3"
+	"github.com/cedy/authboss/v3"
 )
 
 // FormValue types
@@ -217,15 +217,15 @@ func (h HTTPBodyReader) Read(page string, r *http.Request) (authboss.Validator, 
 		b, err := io.ReadAll(r.Body)
 		r.Body.Close()
 		if err != nil {
-			return nil, errors.Wrap(err, "failed to read http body")
+			return nil, fmt.Errorf("failed to read http body: %w", err)
 		}
 
 		if err = json.Unmarshal(b, &values); err != nil {
-			return nil, errors.Wrap(err, "failed to parse json http body")
+			return nil, fmt.Errorf("failed to parse json http body: %w", err)
 		}
 	} else {
 		if err := r.ParseForm(); err != nil {
-			return nil, errors.Wrapf(err, "failed to parse form on page: %s", page)
+			return nil, fmt.Errorf("failed to parse form on page: %s: %w", page, err)
 		}
 		values = URLValuesToMap(r.Form)
 	}
@@ -321,7 +321,7 @@ func (h HTTPBodyReader) Read(page string, r *http.Request) (authboss.Validator, 
 			Arbitrary:         arbitrary,
 		}, nil
 	default:
-		return nil, errors.Errorf("failed to parse unknown page's form: %s", page)
+		return nil, fmt.Errorf("failed to parse unknown page's form: %s", page)
 	}
 }
 

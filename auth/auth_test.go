@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/volatiletech/authboss/v3"
-	"github.com/volatiletech/authboss/v3/mocks"
+	"github.com/cedy/authboss/v3"
+	"github.com/cedy/authboss/v3/mocks"
 )
 
 func TestAuthInit(t *testing.T) {

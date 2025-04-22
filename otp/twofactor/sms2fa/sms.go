@@ -6,6 +6,8 @@ import (
 	"context"
 	"crypto/rand"
 	"crypto/subtle"
+	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"path"
@@ -13,9 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/friendsofgo/errors"
-	"github.com/volatiletech/authboss/v3"
-	"github.com/volatiletech/authboss/v3/otp/twofactor"
+	"github.com/cedy/authboss/v3"
+	"github.com/cedy/authboss/v3/otp/twofactor"
 )
 
 // Session keys
@@ -351,7 +352,7 @@ func (s *SMSValidator) sendCode(w http.ResponseWriter, r *http.Request, user Use
 	}
 
 	if len(phoneNumber) == 0 {
-		return errors.Errorf("no phone number was available in PostSendCode for user %s", user.GetPID())
+		return fmt.Errorf("no phone number was available in PostSendCode for user %s", user.GetPID())
 	}
 
 	var data authboss.HTMLData
@@ -386,7 +387,7 @@ func (s *SMSValidator) validateCode(w http.ResponseWriter, r *http.Request, user
 	} else {
 		code, ok := authboss.GetSession(r, SessionSMSSecret)
 		if !ok || len(code) == 0 {
-			return errors.Errorf("no code in session for user %s", user.GetPID())
+			return fmt.Errorf("no code in session for user %s", user.GetPID())
 		}
 
 		verified = 1 == subtle.ConstantTimeCompare([]byte(inputCode), []byte(code))

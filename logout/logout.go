@@ -2,10 +2,10 @@
 package logout
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/friendsofgo/errors"
-	"github.com/volatiletech/authboss/v3"
+	"github.com/cedy/authboss/v3"
 )
 
 func init() {
@@ -30,7 +30,7 @@ func (l *Logout) Init(ab *authboss.Authboss) error {
 	case "DELETE":
 		logoutRouteMethod = l.Config.Core.Router.Delete
 	default:
-		return errors.Errorf("logout wants to register a logout route but was given an invalid method: %s", l.Config.Modules.LogoutMethod)
+		return fmt.Errorf("logout wants to register a logout route but was given an invalid method: %s", l.Config.Modules.LogoutMethod)
 	}
 
 	logoutRouteMethod("/logout", l.Core.ErrorHandler.Wrap(l.Logout))

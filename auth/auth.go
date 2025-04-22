@@ -5,7 +5,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/volatiletech/authboss/v3"
+	"github.com/cedy/authboss/v3"
 )
 
 const (

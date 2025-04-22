@@ -13,8 +13,7 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/friendsofgo/errors"
-	"github.com/volatiletech/authboss/v3"
+	"github.com/cedy/authboss/v3"
 )
 
 const (
@@ -135,7 +134,7 @@ func (c *Confirm) StartConfirmation(ctx context.Context, user authboss.Confirmab
 
 	logger.Infof("generated new confirm token for user: %s", user.GetPID())
 	if err := c.Authboss.Config.Storage.Server.Save(ctx, user); err != nil {
-		return errors.Wrap(err, "failed to save user during StartConfirmation, user data may be in weird state")
+		return fmt.Errorf("failed to save user during StartConfirmation, user data may be in weird state: %w", err)
 	}
 
 	if c.Authboss.Config.Modules.MailNoGoroutine {

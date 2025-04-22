@@ -14,8 +14,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/friendsofgo/errors"
-	"github.com/volatiletech/authboss/v3"
+	"github.com/cedy/authboss/v3"
 )
 
 const (
@@ -134,7 +133,7 @@ func (o *OTP) LoginPost(w http.ResponseWriter, r *http.Request) error {
 	for i, p := range passwords {
 		dbSum, err := base64.StdEncoding.DecodeString(p)
 		if err != nil {
-			return errors.Wrap(err, "otp in database was not valid base64")
+			return fmt.Errorf("otp in database was not valid base64: %w", err)
 		}
 
 		if 1 == subtle.ConstantTimeCompare(inputSum[:], dbSum) {

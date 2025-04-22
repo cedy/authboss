@@ -3,12 +3,11 @@ package register
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"sort"
 
-	"github.com/friendsofgo/errors"
-
-	"github.com/volatiletech/authboss/v3"
+	"github.com/cedy/authboss/v3"
 )
 
 // Pages

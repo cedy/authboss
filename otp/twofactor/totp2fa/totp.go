@@ -5,6 +5,7 @@ package totp2fa
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"image/png"
 	"io"
@@ -12,11 +13,10 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/friendsofgo/errors"
+	"github.com/cedy/authboss/v3"
+	"github.com/cedy/authboss/v3/otp/twofactor"
 	"github.com/pquerna/otp"
 	"github.com/pquerna/otp/totp"
-	"github.com/volatiletech/authboss/v3"
-	"github.com/volatiletech/authboss/v3/otp/twofactor"
 )
 
 const (
@@ -172,7 +172,7 @@ func (t *TOTP) PostSetup(w http.ResponseWriter, r *http.Request) error {
 		AccountName: user.GetEmail(),
 	})
 	if err != nil {
-		return errors.Wrap(err, "failed to create a totp key")
+		return fmt.Errorf("failed to create a totp key: %w", err)
 	}
 
 	secret := key.Secret()
@@ -213,17 +213,17 @@ func (t *TOTP) GetQRCode(w http.ResponseWriter, r *http.Request) error {
 		))
 
 	if err != nil {
-		return errors.Wrap(err, "failed to reconstruct key from session key: %s")
+		return fmt.Errorf("failed to reconstruct key from session key: %w", err)
 	}
 
 	image, err := key.Image(200, 200)
 	if err != nil {
-		return errors.Wrap(err, "failed to create totp qr code")
+		return fmt.Errorf("failed to create totp qr code: %w", err)
 	}
 
 	buf := &bytes.Buffer{}
 	if err = png.Encode(buf, image); err != nil {
-		return errors.Wrap(err, "failed to encode qr code to png")
+		return fmt.Errorf("failed to encode qr code to png: %w", err)
 	}
 
 	w.Header().Set("Cache-Control", "no-store")

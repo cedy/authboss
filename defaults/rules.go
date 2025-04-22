@@ -1,12 +1,12 @@
 package defaults
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"unicode"
 
-	"github.com/friendsofgo/errors"
-	"github.com/volatiletech/authboss/v3"
+	"github.com/cedy/authboss/v3"
 )
 
 var blankRegex = regexp.MustCompile(`^\s*$`)
